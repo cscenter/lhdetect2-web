@@ -1,26 +1,29 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from enum import Enum
-from lhdetect2_web.users.models import CustomUser
+from users.models import CustomUser
+
+
+class GenerationType(Enum):
+    UNKNOWN = 'undefined'
+    CLEAN_LINE = 'clean line'
+    HYBRID = 'hybrid'
+
+
+class GrowthFacility(Enum):
+    UNKNOWN = 'undefined'
+    FIELD = 'field'
+    GREENHOUSE = 'greenhouse'
+    PLANT_CHAMBER = 'plant chamber'
+
+
+class Watering(Enum):
+    UNKNOWN = 'undefined'
+    WATERING = 'watering'
+    DROUGHT = 'drought'
 
 
 class Dataset(models.Model):
-    class GenerationType(Enum):
-        UNKNOWN = 'undefined'
-        CLEAN_LINE = 'clean line'
-        HYBRID = 'hybrid'
-
-    class GrowthFacility(Enum):
-        UNKNOWN = 'undefined'
-        FIELD = 'field'
-        GREENHOUSE = 'greenhouse'
-        PLANT_CHAMBER = 'plant chamber'
-
-    class Watering(Enum):
-        UNKNOWN = 'undefined'
-        WATERING = 'watering'
-        DROUGHT = 'drought'
-
     user = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=50)
     sharing = models.BooleanField(default=True)
