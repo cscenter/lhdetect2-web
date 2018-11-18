@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'bootstrap4',
+    'widget_tweaks',
     'users.apps.UsersConfig',
     'datasets.apps.DatasetsConfig',
     'django.contrib.admin',
@@ -133,3 +134,7 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGOUT_REDIRECT_URL = 'index'
+
+LOGIN_REDIRECT_URL = 'index'
