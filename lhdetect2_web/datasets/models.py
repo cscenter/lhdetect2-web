@@ -31,18 +31,18 @@ class Dataset(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     separator = models.CharField(max_length=5, default='_')
-    files_path = models.FilePathField(path="", allow_files=False, allow_folders=True)
+    files_path = models.FilePathField(path="", allow_files=False, allow_folders=True, blank=True)
 
     parent1 = models.CharField(max_length=200)
     parent2 = models.CharField(max_length=200)
     gen_type = models.CharField(max_length=10,
-                                choices=[(tag, tag.value) for tag in GenerationType])
+                                choices=[(tag, tag.value) for tag in GenerationType], blank=True)
     generation = models.PositiveSmallIntegerField()
 
     place = models.CharField(max_length=13,
-                             choices=[(tag, tag.value) for tag in GrowthFacility])
+                             choices=[(tag, tag.value) for tag in GrowthFacility], blank=True)
     watering = models.CharField(max_length=8,
-                                choices=[(tag, tag.value) for tag in Watering])
+                                choices=[(tag, tag.value) for tag in Watering], blank=True)
 
     repetition = models.PositiveIntegerField()
     # TODO: restrict to month and year only

@@ -1,0 +1,20 @@
+{% extends 'datasets/base_datasets.html' %}
+
+{% load django_tables2 %}
+
+{% block title %} LHDetect 2 – Public Datasets {% endblock %}
+
+
+{% block inner-content %}
+  {% render_table table %}
+{% comment %}
+<h1>My Datasets</h1>
+<ul>
+{% for dataset in object_list %}
+    <li>{{ dataset.date_updated|date }} - {{ dataset.title }}</li>
+{% empty %}
+    <li>No datasets yet.</li>
+{% endfor %}
+</ul>
+{% endcomment %}
+{% endblock %}

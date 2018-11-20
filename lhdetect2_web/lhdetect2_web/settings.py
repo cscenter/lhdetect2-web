@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'bootstrap4',
     'widget_tweaks',
+    'django_tables2',
     'users.apps.UsersConfig',
     'datasets.apps.DatasetsConfig',
     'django.contrib.admin',
@@ -138,3 +139,5 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGOUT_REDIRECT_URL = 'index'
 
 LOGIN_REDIRECT_URL = 'index'
+
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'

@@ -29,8 +29,11 @@
                 {{ user.username }}
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                {% comment %}{% if user.is_superuser %}
+                <a class="dropdown-item" href="{% url 'admin'  %}">Admin page</a>
+                {% endif %}{% endcomment %}
                 <a class="dropdown-item" href="#">My account</a>
-                <a class="dropdown-item" href="#">Change password</a>
+{#                <a class="dropdown-item" href="#">Change password</a>#}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
               </div>
@@ -47,10 +50,10 @@
     </nav>
 
     <div class="container">
-      <ol class="breadcrumb my-4">
+      {% comment %}<ol class="breadcrumb my-4">
         {% block breadcrumb %}
         {% endblock %}
-      </ol>
+      </ol>{% endcomment %}
       {% block content %}
       {% endblock %}
     </div>
