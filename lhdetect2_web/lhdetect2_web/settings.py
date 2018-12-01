@@ -141,3 +141,6 @@ LOGOUT_REDIRECT_URL = 'index'
 LOGIN_REDIRECT_URL = 'index'
 
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
