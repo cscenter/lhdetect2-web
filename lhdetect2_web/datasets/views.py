@@ -6,7 +6,7 @@ import django_tables2 as tables
 
 from datasets.models import Dataset
 from datasets.tables import DatasetTable
-from datasets.forms import DatasetForm
+from datasets.forms import DatasetForm, ImageForm
 
 
 def index(request):
@@ -33,6 +33,18 @@ class DatasetListView(tables.SingleTableView):
     template_name = 'datasets/datasets_list.html'
 
 
-class ImageUploadView(View):
-    def get(self):
-        pass
+def upload_image(request):
+    form = ImageForm(request.POST, request.FILES)
+    if form.is_valid():
+        image = form.save()
+        data = {
+            'is_valid': True,
+            'name': image.file.name,
+            'url': image.file.url
+        }
+    else:
+        data = {
+            'is_valid': False
+        }
+
+    return JsonResponse(data)

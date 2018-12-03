@@ -41,7 +41,7 @@ class Dataset(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     separator = models.CharField(max_length=5, default='_')
-    files_path = models.FilePathField(path="", allow_files=False, allow_folders=True, blank=True)
+    images = models.ManyToManyField(Image)
 
     parent1 = models.CharField(max_length=200)
     parent2 = models.CharField(max_length=200)

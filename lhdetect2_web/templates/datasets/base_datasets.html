@@ -3,7 +3,12 @@
 {% load static %}
 
 {% block javascript %}
+  <script src="{% static 'js/common/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'js/common/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'js/common/jquery-file-upload/jquery.fileupload.js' %}"></script>
+
   <script src="{% static 'js/datasets/datasets.js' %}"></script>
+  <script src="{% static 'js/datasets/image-upload.js' %}"></script>
 {% endblock %}
 
 {% block stylesheet %}
@@ -19,7 +24,7 @@
           </form>
           <ul class="sidebar-nav">
             <li><a href="">My Datasets</a></li>
-            <li><a href="{% url 'public' %}">Public Datasets</a></li>
+            <li><a href="{% url 'datasets:public' %}">Public Datasets</a></li>
             <li><a href="">Favorites</a></li>
           </ul>
        {% endblock %}
@@ -27,7 +32,7 @@
     <div class="col-sm-10 ">{% block inner-content %}{% endblock %}</div>
   </div>
   <div class="modal fade" id="modal-dataset">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
       </div>
     </div>

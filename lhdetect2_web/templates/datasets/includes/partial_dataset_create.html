@@ -7,7 +7,32 @@
     </button>
   </div>
   <div class="modal-body">
-    {% include 'includes/form.html' %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          {% include 'includes/form.html' %}
+        </div>
+        <div class="col-md-6 ml-auto">
+          <div style="margin-bottom: 1.25rem;">
+            <button type="button" id="uploadImages" class="btn btn-primary">
+              Upload photos
+            </button>
+            <input id="fileUpload" type="file" name="file" multiple
+                   style="display: none;"
+                   data-url="{% url 'datasets:upload_image' %}"
+                   data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+            <table id="uploadingFiles" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Images</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
