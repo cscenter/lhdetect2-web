@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 import django_tables2 as tables
 
-from datasets.models import Dataset
+from datasets.models import Dataset, SharingMode
 from datasets.tables import DatasetTable
 from datasets.forms import DatasetForm, ImageForm
 
@@ -27,10 +27,28 @@ def create_dataset(request):
     })
 
 
-class DatasetListView(tables.SingleTableView):
+class UserDatasetListView(tables.SingleTableView):
     table_class = DatasetTable
-    queryset = Dataset.objects.filter(sharing=True)
     template_name = 'datasets/datasets_list.html'
+
+    def get_queryset(self):
+        return Dataset.objects.filter(user_id=self.request.user.id)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDatasetListView, self).get_context_data()
+        context['list_name'] = 'My Datasets'
+        return context
+
+
+class PublicDatasetListView(tables.SingleTableView):
+    table_class = DatasetTable
+    queryset = Dataset.objects.filter(sharing=SharingMode.PUBLIC.name)
+    template_name = 'datasets/datasets_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PublicDatasetListView, self).get_context_data()
+        context['list_name'] = 'Public Datasets'
+        return context
 
 
 def upload_image(request):
