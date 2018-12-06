@@ -4,9 +4,10 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 import django_tables2 as tables
 
-from datasets.models import Dataset, SharingMode
+from datasets.models import Dataset, SharingMode, Image
 from datasets.tables import DatasetTable
 from datasets.forms import DatasetForm, ImageForm
+from users.models import CustomUser
 
 
 def index(request):
@@ -15,16 +16,33 @@ def index(request):
 
 
 def create_dataset(request):
-    form = DatasetForm()
+    data = dict()
+
+    if request.method == 'POST':
+        form = DatasetForm(request.POST)
+        if form.is_valid():
+            dataset = form.save(commit=False)
+            dataset.user = CustomUser.objects.get(id=request.user.id)
+            dataset.save()
+
+            form_data = request.POST.copy()
+            image_ids = form_data.get("images").split(',')
+            images = Image.objects.filter(id__in=image_ids)
+            dataset.images.add(*images)
+
+            data['form_is_valid'] = True
+        else:
+            data['form_is_valid'] = False
+    else:
+        form = DatasetForm()
+
     context = {
         'form': form
     }
-    html_form = render_to_string('datasets/includes/partial_dataset_create.html',
-                                 context, request=request)
+    data['html_form'] = render_to_string('datasets/includes/partial_dataset_create.html',
+                                         context, request=request)
 
-    return JsonResponse({
-        'html_form': html_form
-    })
+    return JsonResponse(data)
 
 
 class UserDatasetListView(tables.SingleTableView):
@@ -58,7 +76,8 @@ def upload_image(request):
         data = {
             'is_valid': True,
             'name': image.file.name,
-            'url': image.file.url
+            'url': image.file.url,
+            'id': image.pk
         }
     else:
         data = {

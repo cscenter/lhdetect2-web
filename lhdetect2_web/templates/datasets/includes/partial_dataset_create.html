@@ -1,4 +1,4 @@
-<form method="post">
+<form method="post" action="{% url 'datasets:create_dataset' %}" class="js-dataset-create-form">
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">Add a New Dataset</h4>
@@ -13,8 +13,8 @@
           {% include 'includes/form.html' %}
         </div>
         <div class="col-md-6 ml-auto">
-          <div style="margin-bottom: 1.25rem;">
-            <button type="button" id="uploadImages" class="btn btn-primary">
+          <div>
+            <button type="button" id="uploadImages" class="upload btn btn-primary">
               Upload photos
             </button>
             <input id="fileUpload" type="file" name="file" multiple

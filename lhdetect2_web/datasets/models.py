@@ -36,27 +36,27 @@ class Dataset(models.Model):
     title = models.CharField(max_length=50)
     sharing = models.CharField(max_length=7,
                                choices=[(member.name, member.value) for member in SharingMode],
-                               default=SharingMode.PUBLIC)
+                               default=SharingMode.PUBLIC.name)
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     separator = models.CharField(max_length=5, default='_')
     images = models.ManyToManyField(Image)
 
-    parent1 = models.CharField(max_length=200)
-    parent2 = models.CharField(max_length=200)
-    gen_type = models.CharField(max_length=10,
+    parent1 = models.CharField(max_length=200, null=True, blank=True)
+    parent2 = models.CharField(max_length=200, null=True, blank=True)
+    gen_type = models.CharField(max_length=10, verbose_name="Generation Type",
                                 choices=[(member.name, member.value) for member in GenerationType], blank=True)
-    generation = models.PositiveSmallIntegerField()
+    generation = models.PositiveSmallIntegerField(null=True, blank=True)
 
     place = models.CharField(max_length=13,
                              choices=[(member.name, member.value) for member in GrowthFacility], blank=True)
     watering = models.CharField(max_length=8,
                                 choices=[(member.name, member.value) for member in Watering], blank=True)
 
-    repetition = models.PositiveIntegerField()
+    repetition = models.PositiveIntegerField(null=True, blank=True)
     # TODO: restrict to month and year only
-    vegetation_date = models.DateField()
+    vegetation_date = models.DateField(null=True, blank=True)
 
-    custom_fields = JSONField()
+    custom_fields = JSONField(null=True)
 
