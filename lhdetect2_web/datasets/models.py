@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from enum import Enum
+from sorl.thumbnail import ImageField
+
 from users.models import CustomUser
 
 
@@ -25,10 +27,18 @@ class Watering(Enum):
     DROUGHT = 'drought'
 
 
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.user.id, filename)
+
+
 class Image(models.Model):
     title = models.CharField(max_length=255, blank=True)
-    file = models.FileField(upload_to='images/')
+    file = ImageField(upload_to='images/')
     date_uploaded = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Dataset(models.Model):
@@ -60,3 +70,5 @@ class Dataset(models.Model):
 
     custom_fields = JSONField(null=True)
 
+    def __str__(self):
+        return self.title

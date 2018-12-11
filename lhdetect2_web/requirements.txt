@@ -3,3 +3,4 @@ django-bootstrap4==0.0.7
 django-tables2==2.0.3
 django-widget-tweaks==1.4.3
 psycopg2==2.7.5
+sorl-thumbnail==12.5.0

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'widget_tweaks',
     'django_tables2',
+    'sorl.thumbnail',
     'users.apps.UsersConfig',
     'datasets.apps.DatasetsConfig',
     'django.contrib.admin',

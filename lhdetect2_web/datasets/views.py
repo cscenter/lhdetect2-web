@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.views import View
+from django.shortcuts import render, get_object_or_404
+from django.views.generic.list import ListView
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 import django_tables2 as tables
@@ -45,34 +45,47 @@ def create_dataset(request):
     return JsonResponse(data)
 
 
-class UserDatasetListView(tables.SingleTableView):
-    table_class = DatasetTable
-    template_name = 'datasets/datasets_list.html'
+def user_datasets(request):
+    datasets = Dataset.objects.filter(user_id=request.user.id)
 
-    def get_queryset(self):
-        return Dataset.objects.filter(user_id=self.request.user.id)
+    context = {
+        'datasets': datasets,
+        'list_name': 'My Datasets'
+    }
 
-    def get_context_data(self, **kwargs):
-        context = super(UserDatasetListView, self).get_context_data()
-        context['list_name'] = 'My Datasets'
-        return context
+    return render(request, 'datasets/datasets_list.html', context)
 
 
-class PublicDatasetListView(tables.SingleTableView):
-    table_class = DatasetTable
-    queryset = Dataset.objects.filter(sharing=SharingMode.PUBLIC.name)
-    template_name = 'datasets/datasets_list.html'
+def public_datasets(request):
+    datasets = Dataset.objects.filter(sharing=SharingMode.PUBLIC.name)
 
-    def get_context_data(self, **kwargs):
-        context = super(PublicDatasetListView, self).get_context_data()
-        context['list_name'] = 'Public Datasets'
-        return context
+    context = {
+        'datasets': datasets,
+        'list_name': 'Public Datasets'
+    }
+
+    return render(request, 'datasets/datasets_list.html', context)
+
+
+def dataset_images(request, id):
+    dataset = get_object_or_404(Dataset, id=id)
+    images = dataset.images.order_by('title')
+
+    context = {
+        'dataset': dataset,
+        'images': images
+    }
+
+    return render(request, 'datasets/dataset_images.html', context)
 
 
 def upload_image(request):
     form = ImageForm(request.POST, request.FILES)
     if form.is_valid():
-        image = form.save()
+        image = form.save(commit=False)
+        image.title = image.file.name
+        image.save()
+
         data = {
             'is_valid': True,
             'name': image.file.name,
