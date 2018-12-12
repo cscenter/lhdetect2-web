@@ -9,12 +9,12 @@
   <div class="mt-3 mb-3">
     <h2>{{ list_name }}</h2>
   </div>
-  <div class="mt-3 mb-3">
-    <p class="text-muted">{{ datasets|length }} datasets</p>
+  <div class="mt-3 mb-3" id="dataset-counter">
+    {% include 'datasets/includes/partial_dataset_counter.html' %}
   </div>
 
-  <div id="dataset-table">
-    <table class="table">
+  <div>
+    <table class="table" id="dataset-table">
       <thead class="thead-inverse">
         <tr>
           <th>Title</th>
@@ -23,13 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for dataset in datasets %}
-          <tr>
-            <td><a href="{% url 'datasets:dataset_images' dataset.id %}">{{ dataset.title }}</a></td>
-            <td>{{ dataset.date_updated }}</td>
-            <td>{{ dataset.user.email }}</td>
-          </tr>
-        {% endfor %}
+        {% include 'datasets/includes/partial_dataset_list.html' %}
       </tbody>
     </table>
 

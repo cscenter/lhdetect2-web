@@ -1,0 +1,8 @@
+{% for dataset in datasets %}
+  <tr>
+    <td><a href="{% url 'datasets:dataset_images' dataset.id %}">{{ dataset.title }}</a></td>
+    <td>{{ dataset.date_updated }}</td>
+    <td>{{ dataset.user.email }}</td>
+  </tr>
+{% empty %}
+{% endfor %}

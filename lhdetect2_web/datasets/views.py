@@ -10,6 +10,10 @@ from datasets.forms import DatasetForm, ImageForm
 from users.models import CustomUser
 
 
+USER_LIST = 'user'
+PUBLIC_LIST = 'public'
+
+
 def index(request):
     context = {}
     return render(request, 'datasets/index.html', context)
@@ -27,10 +31,30 @@ def create_dataset(request):
 
             form_data = request.POST.copy()
             image_ids = form_data.get("images").split(',')
-            images = Image.objects.filter(id__in=image_ids)
-            dataset.images.add(*images)
+            if image_ids[0] != '':
+                images = Image.objects.filter(id__in=image_ids)
+                dataset.images.add(*images)
 
             data['form_is_valid'] = True
+
+            list_type = request.META.get('HTTP_REFERER').split('/')[-2]
+
+            if list_type == USER_LIST:
+                datasets = get_user_datasets(request)
+            elif list_type == PUBLIC_LIST:
+                datasets = get_public_datasets(request)
+            else:
+                datasets = []
+
+            context = {
+                'datasets': datasets
+            }
+
+            data['html_dataset_list'] = render_to_string('datasets/includes/partial_dataset_list.html',
+                                                         context)
+            data['html_dataset_counter'] = render_to_string('datasets/includes/partial_dataset_counter.html',
+                                                            context)
+
         else:
             data['form_is_valid'] = False
     else:
@@ -45,8 +69,16 @@ def create_dataset(request):
     return JsonResponse(data)
 
 
+def get_user_datasets(request):
+    return Dataset.objects.filter(user_id=request.user.id)
+
+
+def get_public_datasets(request):
+    return Dataset.objects.filter(sharing=SharingMode.PUBLIC.name)
+
+
 def user_datasets(request):
-    datasets = Dataset.objects.filter(user_id=request.user.id)
+    datasets = get_user_datasets(request)
 
     context = {
         'datasets': datasets,
@@ -57,7 +89,7 @@ def user_datasets(request):
 
 
 def public_datasets(request):
-    datasets = Dataset.objects.filter(sharing=SharingMode.PUBLIC.name)
+    datasets = get_public_datasets(request)
 
     context = {
         'datasets': datasets,

@@ -43,7 +43,9 @@ $(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.form_is_valid) {
-                    $("#modal-dataset").modal("hide")
+                    $("#dataset-table tbody").html(data.html_dataset_list);
+                    $("#dataset-counter").html(data.html_dataset_counter);
+                    $("#modal-dataset").modal("hide");
                 }
                 else {
                     $("#modal-dataset .modal-content").html(data.html_form);
