@@ -1,10 +1,9 @@
 $(function () {
 
-    $(".js-create-dataset").click(function(event) {
-        event.preventDefault();
+    let loadForm = function(self) {
+        let btn = $(self);
         $.ajax({
-            /*TODO remove url hardcode*/
-            url: '/datasets/create/',
+            url: btn.attr("data-url"),
             type: 'get',
             dataType: 'json',
             beforeSend: function () {
@@ -17,6 +16,32 @@ $(function () {
                 console.log(data)
             }
         });
+    };
+
+    let saveForm = function (self) {
+        let form = $(self);
+        $.ajax({
+            url: form.attr("action"),
+            data: form.serialize(),
+            type: form.attr("method"),
+            dataType: 'json',
+            success: function (data) {
+                if (data.form_is_valid) {
+                    $("#dataset-table tbody").html(data.html_dataset_list);
+                    $("#dataset-counter").html(data.html_dataset_counter);
+                    $("#modal-dataset").modal("hide");
+                }
+                else {
+                    $("#modal-dataset .modal-content").html(data.html_form);
+                }
+            }
+        });
+        return false;
+    };
+
+    $(".js-create-dataset").click(function(event) {
+        event.preventDefault();
+        loadForm(this);
     });
 
     $("#modal-dataset").on("submit", ".js-dataset-create-form", function(event) {
@@ -34,24 +59,18 @@ $(function () {
 
         $(this).append(image_input);
 
-        let form = $(this);
+        saveForm(this);
+        return false;
+    });
 
-        $.ajax({
-            url: form.attr("action"),
-            data: form.serialize(),
-            type: form.attr("method"),
-            dataType: 'json',
-            success: function (data) {
-                if (data.form_is_valid) {
-                    $("#dataset-table tbody").html(data.html_dataset_list);
-                    $("#dataset-counter").html(data.html_dataset_counter);
-                    $("#modal-dataset").modal("hide");
-                }
-                else {
-                    $("#modal-dataset .modal-content").html(data.html_form);
-                }
-            }
-        });
+    $("#dataset-table").on("click", ".js-delete-dataset", function(event) {
+        event.preventDefault();
+        loadForm(this);
+    });
+
+    $("#modal-dataset").on("submit", ".js-dataset-delete-form", function(event) {
+        // TODO: add dataset images deletion
+        saveForm(this);
         return false;
     });
 });

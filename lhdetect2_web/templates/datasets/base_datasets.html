@@ -20,7 +20,9 @@
     <div class="col-sm-2 sidebar">
         {% block sidebar %}
           <form class="form-inline ml-auto">
-            <button class="btn btn-primary js-create-dataset">+ New Dataset</button>
+            <button type="button"
+                    class="btn btn-primary js-create-dataset"
+                    data-url="{% url 'datasets:create_dataset' %}">+ New Dataset</button>
           </form>
           <ul class="sidebar-nav">
             <li><a href="{% url 'datasets:user' %}">My Datasets</a></li>

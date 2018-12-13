@@ -10,5 +10,6 @@ urlpatterns = [
     path('user/', views.user_datasets, name='user'),
     path('create/', views.create_dataset, name='create_dataset'),
     path('upload/', views.upload_image, name='upload_image'),
-    path('<int:id>/', views.dataset_images, name='dataset_images')
+    path('<int:id>/', views.dataset_images, name='dataset_images'),
+    path('<int:id>/delete/', views.delete_dataset, name='delete_dataset')
 ]

@@ -77,6 +77,35 @@ def get_public_datasets(request):
     return Dataset.objects.filter(sharing=SharingMode.PUBLIC.name)
 
 
+def delete_dataset(request, id):
+    dataset = get_object_or_404(Dataset, id=id)
+
+    data = dict()
+    if request.method == 'POST':
+        dataset.delete()
+        data['form_is_valid'] = True
+
+        list_type = request.META.get('HTTP_REFERER').split('/')[-2]
+
+        if list_type == USER_LIST:
+            datasets = get_user_datasets(request)
+        elif list_type == PUBLIC_LIST:
+            datasets = get_public_datasets(request)
+        else:
+            datasets = []
+
+        context = {
+            'datasets': datasets
+        }
+        data['html_dataset_list'] = render_to_string('datasets/includes/partial_dataset_list.html', context)
+    else:
+        context = {
+            'dataset': dataset
+        }
+        data['html_form'] = render_to_string('datasets/includes/partial_dataset_delete.html', context, request=request)
+    return JsonResponse(data)
+
+
 def user_datasets(request):
     datasets = get_user_datasets(request)
 
