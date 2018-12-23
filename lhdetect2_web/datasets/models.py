@@ -36,6 +36,7 @@ class Image(models.Model):
     title = models.CharField(max_length=255, blank=True)
     file = ImageField(upload_to='images/')
     date_uploaded = models.DateTimeField(auto_now_add=True)
+    lhdetect_desc = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.title

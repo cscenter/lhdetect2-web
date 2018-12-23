@@ -7,6 +7,7 @@ import django_tables2 as tables
 from datasets.models import Dataset, SharingMode, Image
 from datasets.tables import DatasetTable
 from datasets.forms import DatasetForm, ImageForm
+from datasets.tasks import process_image
 from users.models import CustomUser
 
 
@@ -146,6 +147,8 @@ def upload_image(request):
         image = form.save(commit=False)
         image.title = image.file.name
         image.save()
+
+        process_image.delay(image.pk)
 
         data = {
             'is_valid': True,
